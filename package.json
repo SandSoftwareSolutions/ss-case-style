@@ -1,0 +1,44 @@
+{
+  "name": "@sandsoftwaresolutions/case-style",
+  "version": "0.1.0",
+  "description": "camelCase, snake_case, kebab-case and more, with acronyms, digits and accents handled; safe key conversion for API payloads.",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./src/index.d.ts",
+      "import": "./src/index.js"
+    }
+  },
+  "files": [
+    "src",
+    "README.md",
+    "LICENSE"
+  ],
+  "sideEffects": false,
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "test": "node --test",
+    "pack:check": "npm pack --dry-run"
+  },
+  "keywords": [
+    "case",
+    "camelcase",
+    "snakecase",
+    "kebab-case",
+    "convert"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SandSoftwareSolutions/ss-case-style.git"
+  },
+  "bugs": {
+    "url": "https://github.com/SandSoftwareSolutions/ss-case-style/issues"
+  },
+  "homepage": "https://github.com/SandSoftwareSolutions/ss-case-style#readme",
+  "publishConfig": {
+    "access": "public"
+  }
+}
