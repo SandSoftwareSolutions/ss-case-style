@@ -1,23 +1,27 @@
 /**
  * Splits text into words: on spaces and punctuation (`_ - . /`), and inside camelCase and PascalCase, where a run of capitals is one
  * acronym word (`"parseHTTPResponse"` gives `parse`, `HTTP`, `Response`). Digits stay with the word before them (`"version2Beta"` gives
- * `version2`, `Beta`) unless `splitDigits` is true. Works with any letters, not only a-z.
+ * `version2`, `Beta`) unless `splitDigits` is true. Works with any letters, not only a-z; combining marks (accents, Devanagari vowel signs) stay with their letter.
  */
 export function words(text, { splitDigits = false } = {}) {
   if (typeof text !== "string") throw new TypeError("case-style: text must be a string");
   let s = text.normalize("NFC");
-  s = s.replace(/(\p{Ll})(\p{Lu})/gu, "$1 $2"); // fooBar -> foo Bar
+  s = s.replace(/(\p{Ll}\p{M}*)(\p{Lu})/gu, "$1 $2"); // fooBar -> foo Bar
   s = s.replace(/(\p{Lu})(\p{Lu}\p{Ll})/gu, "$1 $2"); // HTTPServer -> HTTP Server
   if (splitDigits) {
     s = s.replace(/(\p{L})(\p{N})/gu, "$1 $2").replace(/(\p{N})(\p{L})/gu, "$1 $2");
   } else {
     s = s.replace(/(\p{N})(\p{Lu}\p{Ll})/gu, "$1 $2"); // 2Beta -> 2 Beta (a new capitalised word starts)
   }
-  return s.split(/[^\p{L}\p{N}]+/u).filter(Boolean);
+  return s.split(/[^\p{L}\p{N}\p{M}]+/u).filter(Boolean);
 }
 
 const lower = (w) => w.toLowerCase();
-const capital = (w) => (w === "" ? w : w[0].toUpperCase() + w.slice(1).toLowerCase());
+const capital = (w) => {
+  if (w === "") return w;
+  const first = String.fromCodePoint(w.codePointAt(0)); // a whole code point, not half a surrogate pair
+  return first.toUpperCase() + w.slice(first.length).toLowerCase();
+};
 const isAcronym = (w) => w.length > 1 && w === w.toUpperCase() && w !== w.toLowerCase();
 
 /** `fooBar`. With `keepAcronyms: true` an acronym stays as it is: `parseHTTPResponse`. */

@@ -31,7 +31,7 @@ const server = convertKeys(client, "snake");
 
 ## Words
 
-Everything starts by splitting text into words (`words(text)`): on spaces and punctuation (`_ - . /`), inside `camelCase`, and a run of capitals counts as one acronym (`XMLHttpRequest` → `XML`, `Http`, `Request`). Digits stay with the word before (`version2Beta` → `version2`, `Beta`; `splitDigits: true` splits them). It works with any letters: `ÉcoleNormale` → `école_normale`, `Привет Мир` → `привет-мир`.
+Everything starts by splitting text into words (`words(text)`): on spaces and punctuation (`_ - . /`), inside `camelCase`, and a run of capitals counts as one acronym (`XMLHttpRequest` → `XML`, `Http`, `Request`). Digits stay with the word before (`version2Beta` → `version2`, `Beta`; `splitDigits: true` splits them). It works with any letters: `ÉcoleNormale` → `école_normale`, `Привет Мир` → `привет-мир`, and combining marks stay with their letter (Devanagari `हिंदी भाषा` → `हिंदी_भाषा`). Known limit: a camelCase name made of single-letter words (`aZ_é_B`) does not convert back to the same words.
 
 `keepAcronyms: true` keeps capitals in camel, pascal and title case: `camelCase("USER_ID", { keepAcronyms: true })` → `userID`.
 

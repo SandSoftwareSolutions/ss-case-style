@@ -88,3 +88,19 @@ test("convertKeys refuses collisions and dangerous keys instead of losing data",
   const polluted = convertKeys(JSON.parse('{"a_b": 1}'), "camel");
   assert.equal(Object.getPrototypeOf(polluted), Object.prototype);
 });
+
+test("combining marks stay inside the word (Devanagari, decomposed accents)", () => {
+  assert.deepEqual(words("हिंदी भाषा"), ["हिंदी", "भाषा"]);
+  assert.equal(snakeCase("हिंदी भाषा"), "हिंदी_भाषा");
+  assert.deepEqual(words("fox́Bar"), ["fox́", "Bar"]);
+});
+
+test("conversions are idempotent, also with a dotted capital I and astral letters", () => {
+  for (const input of ["İstanbulAirport", "zİéİ́Bz", "𐐨𐐯 foo", "straße_xy z"]) {
+    for (const style of ["camel", "pascal", "snake", "kebab", "constant", "dot", "title", "sentence"]) {
+      const once = convert(input, style);
+      assert.equal(convert(once, style), once, `${style} of ${JSON.stringify(input)}`);
+    }
+  }
+  assert.equal(pascalCase("𐐨𐐯 foo"), "𐐀𐐯Foo");
+});
