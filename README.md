@@ -10,6 +10,8 @@
 npm install @sandsoftwaresolutions/case-style
 ```
 
+Works with `import` and `require()`, and ships TypeScript types for both.
+
 ## Usage
 
 ```js
